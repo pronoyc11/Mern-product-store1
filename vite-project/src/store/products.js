@@ -1,6 +1,8 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import { create } from "zustand";
+import base from "../../back_link";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useProductStore = create((set) => ({
   products: [],
@@ -9,7 +11,7 @@ export const useProductStore = create((set) => ({
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       return { success: false, message: "Please fill all the fields" };
     }
-    const res = await fetch("/api/products", {
+    const res = await fetch(`${apiUrl}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,14 +23,14 @@ export const useProductStore = create((set) => ({
     return { success: true, message: "Product created successfully." };
   },
   fetchProducts: async () => {
-    const res = await fetch("/api/products");
+    const res = await fetch(`${apiUrl}/api/products`);
     const data = await res.json();
     set({ products: data.data });
     return { success: true, message: "All the product is got successfully." };
   },
   updateProduct: async (updatedProduct, id) => {
     // console.log(JSON.stringify(updatedProduct));
-    const res = await fetch(`/api/products/${id}`, {
+    const res = await fetch(`${apiUrl}/api/products/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +50,7 @@ export const useProductStore = create((set) => ({
     return { success: true, message: "Product updated successfully" };
   },
   deleteProducts: async (id) => {
-    const res = await fetch(`/api/products/${id}`, {
+    const res = await fetch(`${apiUrl}/api/products/${id}`, {
       method: "DELETE",
     });
     const data = await res.json();
