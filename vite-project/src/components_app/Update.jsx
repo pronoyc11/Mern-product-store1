@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useProductStore } from "../store/products";
 import { CloseButton, Portal, Input, HStack, Dialog, Button, Text } from "@chakra-ui/react";
+import { toaster } from "../components/ui/toaster";
 
 
 const Update = ({ product }) => {
@@ -12,8 +13,21 @@ const Update = ({ product }) => {
   const { updateProduct } = useProductStore();
   const handleUpdate = async () => {
     const res = await updateProduct(updatedProduct, product._id);
-
-    console.log(res);
+    if (res.success) {
+      toaster.create({
+        description: `${res.message}`,
+        type: "success",
+        closable: true,
+        duration: 2000,
+      });
+    } else {
+      toaster.create({
+        description: `${res.message}`,
+        type: "error",
+        closable: true,
+        duration: 3000,
+      });
+    }
   };
   return (
     <Portal>

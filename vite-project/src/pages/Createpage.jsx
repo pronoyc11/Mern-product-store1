@@ -1,18 +1,13 @@
 import { Container, Spacer } from "@chakra-ui/react";
 import React, { useState } from "react";
-import {
-  Button,
-  Field,
-  Fieldset,
-  For,
-  Input,
-  NativeSelect,
-  Stack,
-} from "@chakra-ui/react";
+import { toaster } from "../components/ui/toaster";
+import { Button, Field, Fieldset, Input, Stack } from "@chakra-ui/react";
 import { useProductStore } from "../store/products";
+import { Navigate } from "react-router-dom";
 
 const Createpage = () => {
   const { createProduct } = useProductStore();
+  const [redirect, setRedirect] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -26,8 +21,26 @@ const Createpage = () => {
       price: "",
       image: "",
     });
-    console.log(obj);
+    if (obj.success) {
+      toaster.create({
+        description: `${obj.message}`,
+        type: "success",
+        closable: true,
+        duration: 2000,
+      });
+      setRedirect(true);
+    } else {
+      toaster.create({
+        description: `${obj.message}`,
+        type: "error",
+        closable: true,
+        duration: 3000,
+      });
+    }
   };
+  if (redirect) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Container paddingTop={{ base: "150px", md: "130px" }}>

@@ -1,6 +1,7 @@
 import { Button, Card, Image, Text, Dialog } from "@chakra-ui/react";
 import Update from "./Update";
 import { useProductStore } from "../store/products";
+import { toaster } from "../components/ui/toaster";
 
 const ProductCard = ({ product }) => {
 
@@ -8,7 +9,21 @@ const ProductCard = ({ product }) => {
 
     const handleDelete = async ()=>{
         const res = await deleteProducts(product._id);
-        console.log(res);
+            if (res.success) {
+              toaster.create({
+                description: `${res.message}`,
+                type: "error",
+                closable: true,
+                duration: 2000,
+              });
+            } else {
+              toaster.create({
+                description: `${res.message}`,
+                type: "error",
+                closable: true,
+                duration: 3000,
+              });
+            }
     }
 
 
